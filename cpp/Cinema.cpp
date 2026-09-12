@@ -3,7 +3,7 @@ using namespace std;
 
 class Cinema{
     private:
-        int id;
+        string id;
         string title;
         string genre;
         int released;
@@ -14,7 +14,7 @@ class Cinema{
         Cinema(){}
 
         // Constructor dengan parameter
-        Cinema(int i, string t, string g, int r, int d) {
+        Cinema(string i, string t, string g, int r, int d) {
             id = i;
             title = t;
             genre = g;
@@ -23,14 +23,14 @@ class Cinema{
         }
 
         // Getter Method
-        int getId(){return id;}
+        string getId(){return id;}
         string getTitle(){return title;}
         string getGenre(){return genre; }
         int getReleased(){return released;}
         int getDuration(){return duration;}
 
         // Setter Method
-        void setId(int id){
+        void setId(string id){
             this->id = id;
         }
         void setTitle(string title){
@@ -46,5 +46,11 @@ class Cinema{
             this->duration = duration;
         }
 
+        // Data satu objek jadi satu baris untuk tabel
+        vector<string> toRow() const {
+            return { id, title, genre, to_string(duration) + " menit", to_string(released) };
+        }
+
+        // Destructor
         ~Cinema(){}
 };
