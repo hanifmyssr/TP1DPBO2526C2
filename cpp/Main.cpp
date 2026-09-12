@@ -1,25 +1,32 @@
 #include "Cinema.cpp"
 
 // Tabel dinamis : Lebar kolom menyesuaikan data terpanjang
+// const & = parameter cuma dipinjam untuk dibaca, tidak dicopy dan tidak diubah
 void cetakTabel(const vector<string>& header, const vector<vector<string>>& rows) {
     int n = header.size();
     vector<size_t> lebar(n);
+    // loop untuk set nilai lebar ke-i sesuai panjang header
     for (int i = 0; i < n; i++) lebar[i] = header[i].size();
+    // bandingkan dengan atribut objek untuk mencari lebar terpanjang
     for (const auto& row : rows)
         for (int i = 0; i < n; i++)
             if (row[i].size() > lebar[i]) lebar[i] = row[i].size();
-    for (auto& l : lebar) l += 2;
+    // ditambah dua untuk jarak dengan "|"
+    for (auto& l : lebar) l += 2; 
 
+    // lambda function untuk mencetak garis
     auto garis = [&]() {
         for (size_t l : lebar) cout << "+" << string(l, '-');
         cout << "+" << endl;
     };
 
     garis();
-    cout << left;
+    cout << left; // supaya rata kiri karena pakai setw
+    // cetak header
     for (int i = 0; i < n; i++) cout << "|" << setw(lebar[i]) << (" " + header[i]);
     cout << "|" << endl;
     garis();
+    // cetak objek
     for (const auto& row : rows) {
         for (int i = 0; i < n; i++) cout << "|" << setw(lebar[i]) << (" " + row[i]);
         cout << "|" << endl;
@@ -75,7 +82,7 @@ int inputReleased() {
             continue;
         }
         /* jika inputan tidak dalam rentang yg ditentukan
-        FYI : Pemutaran Komersial Pertama (1895): Lumière bersaudara memutar film 
+        FYI : Pemutaran Komersial Pertama (1895): Lumière bersaudara memutar film
         komersial pertama untuk umum di Paris menggunakan alat Cinematographe*/
         if (r < 1895 || r > 2026) {
             cout << "Tahun rilis tidak valid (1895 - 2026)!\n";
@@ -85,15 +92,45 @@ int inputReleased() {
     }
 }
 
+// Error handling untuk genre
+string inputGenre(){
+    string g;
+    while(true){
+        cout << "Genre           : ";
+        getline(cin , g);
+        if(g.empty()){
+            cout << "Genre tidak boleh kosong!\n";
+            continue;
+        }
+        break;
+    }
+    return g;
+}
+
+// Error handling untuk title
+string inputTitle(){
+    string t;
+    while(true){
+        cout << "Judul           : ";
+        getline(cin , t);
+        if(t.empty()){
+            cout << "Title tidak boleh kosong!\n";
+            continue;
+        }
+        break;
+    }
+    return t;
+}
+
 // prosedur untuk menambahkan objek baru
 void tambahData() {
-    string id, title, genre;
+    string id;
     cout << "\n--- Tambah Data Film ---\n";
 
     // id tidak boleh kosong dan tidak boleh duplikat
+    cin.ignore();
     while (true) {
         cout << "ID              : ";
-        cin.ignore();
         getline(cin, id);
         if(id.empty()){
             cout << "ID tidak boleh kosong!\n";
@@ -106,10 +143,8 @@ void tambahData() {
         break;
     }
 
-    cout << "Judul           : ";
-    getline(cin, title);
-    cout << "Genre           : ";
-    getline(cin, genre);
+    string title = inputTitle();
+    string genre = inputGenre();
     int duration = inputDuration();
     int released = inputReleased();
 
@@ -121,7 +156,9 @@ void tambahData() {
 void cariData() {
     string keyword;
     cout << "\n--- Cari Data Film ---\n";
-    cout << "Judul/kata kunci: "; cin.ignore(); getline(cin, keyword);
+    cout << "Judul/kata kunci: ";
+    cin.ignore();
+    getline(cin, keyword);
 
     vector<string> header = {"ID", "Title", "Genre", "Duration", "Released"};
     vector<vector<string>> rows;
@@ -153,7 +190,8 @@ void updateData() {
     string id;
     cout << "\n--- Update Data Film ---\n";
     cout << "Masukkan ID film: ";
-    cin >> id;
+    cin.ignore();
+    getline(cin, id);
 
     int idx = cariIndexById(id);
     if (idx == -1){
@@ -161,9 +199,8 @@ void updateData() {
         return;
     }
 
-    string title, genre;
-    cout << "Judul baru      : "; getline(cin, title);
-    cout << "Genre baru      : "; getline(cin, genre);
+    string title = inputTitle();
+    string genre = inputGenre();
     int duration = inputDuration();
     int released = inputReleased();
 
@@ -190,14 +227,15 @@ void hapusData() {
 
 // Menampilkan semua command yg tersedia
 void tampilkanMenu() {
-    cout << "\n=========================================\n";
+    cout << "\n===============================\n";
     cout << "     MANAJEMEN DATA CINEMA\n";
-    cout << "=========================================\n";
+    cout << "===============================\n";
     cout << "1. Tambah Data Cinema\n2. Tampilkan Semua Data Cinema\n";
     cout << "3. Update Data Cinema\n4. Hapus Data Cinema\n5. Cari Data Cinema\n0. Keluar\n";
     cout << "Pilih menu: ";
 }
 
+// Animasi Exit
 void animasiKeluar() {
     cout << "\nMenutup program";
     for (int i = 0; i < 3; i++) {
@@ -228,6 +266,13 @@ int main(){
     do {
         tampilkanMenu();
         cin >> pilihan;
+        if (cin.fail()){
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Input harus berupa angka!\n";
+        pilihan = -1;
+        continue;
+        }
 
         switch (pilihan) {
             case 1: tambahData(); break;
