@@ -156,9 +156,16 @@ void tambahData() {
 void cariData() {
     string keyword;
     cout << "\n--- Cari Data Film ---\n";
-    cout << "Judul/kata kunci: ";
     cin.ignore();
-    getline(cin, keyword);
+    while (true) {
+        cout << "Judul/kata kunci: ";
+        getline(cin, keyword);
+        if (keyword.empty()){
+            cout << "Kata kunci tidak boleh kosong!\n";
+            continue;
+        }
+        break;
+    }
 
     vector<string> header = {"ID", "Title", "Genre", "Duration", "Released"};
     vector<vector<string>> rows;
@@ -189,9 +196,16 @@ void tampilkanData() {
 void updateData() {
     string id;
     cout << "\n--- Update Data Film ---\n";
-    cout << "Masukkan ID film: ";
     cin.ignore();
-    getline(cin, id);
+    while (true) {
+        cout << "Masukkan ID film: ";
+        getline(cin, id);
+        if (id.empty()){
+            cout << "ID tidak boleh kosong!\n";
+            continue;
+        }
+        break;
+    }
 
     int idx = cariIndexById(id);
     if (idx == -1){
@@ -215,8 +229,16 @@ void updateData() {
 void hapusData() {
     string id;
     cout << "\n--- Hapus Data Film ---\n";
-    cout << "Masukkan ID film: ";
-    cin >> id;
+    cin.ignore();
+    while (true) {
+        cout << "Masukkan ID film: ";
+        getline(cin, id);
+        if (id.empty()){
+            cout << "ID tidak boleh kosong!\n";
+            continue;
+        }
+        break;
+    }
 
     int idx = cariIndexById(id);
     if (idx == -1) { cout << "Film dengan ID tersebut tidak ditemukan.\n"; return; }
