@@ -175,112 +175,266 @@ if (!empty($old) && $old["update_id"] === "") {
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manajemen Data Cinema</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 30px; background: #f4f4f4; }
-        .container { max-width: 950px; margin: auto; background: #fff; padding: 25px; border-radius: 6px; }
-        h1 { color: #333; margin-top: 0; }
-        .alert { padding: 10px; margin-bottom: 15px; border-radius: 4px; }
-        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        fieldset { margin-bottom: 20px; border: 1px solid #aaa; border-radius: 4px; }
-        legend { font-weight: bold; padding: 0 6px; }
-        label { display: inline-block; width: 130px; }
-        input[type=text], input[type=number] { width: 250px; padding: 5px; }
-        .menu { margin-bottom: 15px; }
-        table { border-collapse: collapse; width: 100%; margin-top: 10px; }
-        th, td { border: 1px solid #999; padding: 8px; text-align: left; }
-        th { background: #eee; }
-        a { margin-right: 8px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #0f0f1a;
+            color: #eee;
+            min-height: 100vh;
+        }
+        .header {
+            background: linear-gradient(135deg, #1f1c2c 0%, #928dab 100%);
+            padding: 25px 30px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,.5);
+        }
+        .header h1 {
+            font-size: 26px;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+        .header p { color: #cfcbe8; margin-top: 4px; font-size: 13px; }
+        .container {
+            max-width: 1000px;
+            margin: 25px auto;
+            padding: 0 20px;
+        }
+        .card {
+            background: #1b1b2f;
+            border-radius: 10px;
+            padding: 22px;
+            margin-bottom: 25px;
+            box-shadow: 0 6px 18px rgba(0,0,0,.45);
+            border: 1px solid #2c2c4a;
+        }
+        .card h2 {
+            color: #f5a623;
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-bottom: 2px solid #f5a623;
+            padding-bottom: 8px;
+        }
+        .alert {
+            border-radius: 6px;
+            padding: 12px 15px;
+            margin-bottom: 0;
+            border-left: 5px solid;
+            font-size: 14px;
+        }
+        .alert + .alert { margin-top: 10px; }
+        .success { background: #123b2a; color: #7ee2a8; border-left-color: #2fbf71; }
+        .error { background: #40141b; color: #ff9aa2; border-left-color: #e63946; }
+        .search-box {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        .search-box input[type=text] {
+            flex: 1;
+            padding: 9px 12px;
+            border-radius: 6px;
+            border: 1px solid #3a3a5c;
+            background: #14142a;
+            color: #eee;
+            font-size: 14px;
+        }
+        .search-box input[type=text]:focus {
+            outline: none;
+            border-color: #f5a623;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #14142a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        table th, table td {
+            border: 1px solid #2c2c4a;
+            padding: 10px;
+            text-align: left;
+            font-size: 14px;
+        }
+        table thead th {
+            background: #f5a623;
+            color: #1f1c2c;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 13px;
+        }
+        table tbody tr:nth-child(even) { background: #171731; }
+        table tbody tr:hover { background: #22224a; }
+        img.thumb {
+            width: 55px;
+            height: 75px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 2px solid #2c2c4a;
+            display: block;
+            background: #0f0f1a;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #fff;
+            transition: filter .2s;
+        }
+        .btn:hover { filter: brightness(1.15); }
+        .btn-primary { background: #e63946; }
+        .btn-warn { background: #f5a623; }
+        .btn-link { background: #457b9d; }
+        .btn-reset { background: #6c757d; }
+        .btn-ghost { background: transparent; border: 1px solid #6c757d; color: #cfcbe8; }
+        form p { margin-bottom: 12px; }
+        form label {
+            display: inline-block;
+            width: 140px;
+            font-size: 14px;
+            color: #cfcbe8;
+        }
+        form input[type=text], form input[type=number] {
+            width: 280px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid #3a3a5c;
+            background: #14142a;
+            color: #eee;
+            font-size: 14px;
+        }
+        form input:focus { outline: none; border-color: #f5a623; }
+        .empty { color: #8b88a8; text-align: center; padding: 20px; font-style: italic; }
+        .lokasi { color: #888; font-size: 12px; vertical-align: middle; }
+        .note { font-size: 12px; color: #8b88a8; margin-top: 8px; }
+        .aksi { white-space: nowrap; }
+        @media (max-width: 700px) {
+            form input[type=text], form input[type=number], .search-box { width: 100%; }
+            form label { display: block; width: 100%; margin-bottom: 4px; }
+        }
     </style>
 </head>
 <body>
+
+<div class="header">
+    <h1>MANAJEMEN DATA CINEMA</h1>
+    <p>Tambah, Lihat, Ubah, Hapus, dan Cari film favoritmu</p>
+</div>
+
 <div class="container">
 
-    <h1>MANAJEMEN DATA CINEMA</h1>
+    <?php if ($pesan !== "" || $error !== "") : ?>
+    <div class="card">
+        <?php if ($pesan !== "") : ?>
+            <div class="alert success"><?php echo htmlspecialchars($pesan); ?></div>
+        <?php endif; ?>
+        <?php if ($error !== "") : ?>
+            <div class="alert error"><?php echo htmlspecialchars($error); ?></div>
+        <?php endif; ?>
+    </div>
+    <?php endif; ?>
 
-    <div class="menu">
-        <a href="index.php">&lt;&lt; Kembali / Lihat Semua Data</a>
+    <!-- ===== DAFTAR / CARI FILM (paling atas) ===== -->
+    <div class="card">
+        <h2><?php echo $judulTabel; ?></h2>
+
+        <form class="search-box" method="get" action="index.php">
+            <input type="hidden" name="cari" value="1">
+            <input type="text" name="keyword" placeholder="Cari film berdasarkan judul / kata kunci..."
+                   value="<?php echo htmlspecialchars($keyword); ?>">
+            <button class="btn btn-warn" type="submit">Cari</button>
+            <?php if ($hasilCari !== null) : ?>
+                <a class="btn btn-reset" href="index.php">Reset</a>
+            <?php endif; ?>
+        </form>
+
+        <?php if (count($tampil) === 0) : ?>
+            <p class="empty">
+                <?php if ($hasilCari !== null) : ?>
+                    Film tidak ditemukan.
+                <?php else : ?>
+                    Belum ada data film. Silakan tambah data di bawah.
+                <?php endif; ?>
+            </p>
+        <?php else : ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Foto</th>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Genre</th>
+                        <th>Duration</th>
+                        <th>Released</th>
+                        <th>Lokasi Foto</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($tampil as $f) : ?>
+                    <tr>
+                        <td>
+                            <img class="thumb" src="<?php echo htmlspecialchars($f->getFoto()); ?>"
+                                 alt="<?php echo htmlspecialchars($f->getTitle()); ?>"
+                                 onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<span class=&quot;lokasi&quot;>Gambar tidak ditemukan</span>');">
+                        </td>
+                        <td><?php echo htmlspecialchars($f->getId()); ?></td>
+                        <td><?php echo htmlspecialchars($f->getTitle()); ?></td>
+                        <td><?php echo htmlspecialchars($f->getGenre()); ?></td>
+                        <td><?php echo $f->getDuration(); ?> menit</td>
+                        <td><?php echo $f->getReleased(); ?></td>
+                        <td class="lokasi"><?php echo htmlspecialchars($f->getFoto()); ?></td>
+                        <td class="aksi">
+                            <a class="btn btn-link" href="index.php?action=update&amp;id=<?php echo urlencode($f->getId()); ?>">Update</a>
+                            <a class="btn btn-primary" href="index.php?action=hapus&amp;id=<?php echo urlencode($f->getId()); ?>"
+                               onclick="return confirm('Hapus data ini?')">Hapus</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
     </div>
 
-    <?php if ($pesan !== "") : ?>
-        <div class="alert success"><?php echo htmlspecialchars($pesan); ?></div>
-    <?php endif; ?>
-    <?php if ($error !== "") : ?>
-        <div class="alert error"><?php echo htmlspecialchars($error); ?></div>
-    <?php endif; ?>
-
-    <fieldset>
+    <!-- ===== FORM TAMBAH / UPDATE (di bawah) ===== -->
+    <div class="card">
         <?php if ($showEdit) : ?>
-            <legend>Update Data Film (ID: <?php echo htmlspecialchars($editId); ?>)</legend>
+            <h2>Update Data Film (ID: <?php echo htmlspecialchars($editId); ?>)</h2>
             <form method="post" action="index.php">
                 <input type="hidden" name="update_id" value="<?php echo htmlspecialchars($editId); ?>">
-                <p><label>ID</label> <?php echo htmlspecialchars($valueId); ?>
-                   <small>(ID tidak dapat diubah)</small></p>
+                <p>
+                    <label>ID</label>
+                    <span><?php echo htmlspecialchars($valueId); ?></span>
+                    <small class="lokasi">(ID tidak dapat diubah)</small>
+                </p>
                 <p><label>Judul</label><input type="text" name="title" value="<?php echo htmlspecialchars($valueTitle); ?>"></p>
                 <p><label>Genre</label><input type="text" name="genre" value="<?php echo htmlspecialchars($valueGenre); ?>"></p>
                 <p><label>Durasi (menit)</label><input type="number" name="duration" min="40" value="<?php echo htmlspecialchars($valueDuration); ?>"></p>
                 <p><label>Tahun rilis</label><input type="number" name="released" min="1895" max="2026" value="<?php echo htmlspecialchars($valueReleased); ?>"></p>
-                <p><label>Path gambar</label><input type="text" name="foto" value="<?php echo htmlspecialchars($valueFoto); ?>"></p>
-                <button type="submit">Update</button>
-                <a href="index.php">Batal</a>
+                <p><label>Path gambar</label><input type="text" name="foto" value="<?php echo htmlspecialchars($valueFoto); ?>" placeholder="img/poster.jpg"></p>
+                <button class="btn btn-warn" type="submit">Update</button>
+                <a class="btn btn-ghost" href="index.php">Batal</a>
             </form>
         <?php else : ?>
-            <legend>Tambah Data Film</legend>
+            <h2>Tambah Data Film</h2>
             <form method="post" action="index.php">
-                <p><label>ID</label><input type="text" name="id" value="<?php echo htmlspecialchars($addId); ?>"></p>
-                <p><label>Judul</label><input type="text" name="title" value="<?php echo htmlspecialchars($addTitle); ?>"></p>
-                <p><label>Genre</label><input type="text" name="genre" value="<?php echo htmlspecialchars($addGenre); ?>"></p>
+                <p><label>ID</label><input type="text" name="id" value="<?php echo htmlspecialchars($addId); ?>" placeholder="F001"></p>
+                <p><label>Judul</label><input type="text" name="title" value="<?php echo htmlspecialchars($addTitle); ?>" placeholder="Nama film"></p>
+                <p><label>Genre</label><input type="text" name="genre" value="<?php echo htmlspecialchars($addGenre); ?>" placeholder="Drama / Aksi / ..."></p>
                 <p><label>Durasi (menit)</label><input type="number" name="duration" min="40" value="<?php echo htmlspecialchars($addDuration); ?>"></p>
                 <p><label>Tahun rilis</label><input type="number" name="released" min="1895" max="2026" value="<?php echo htmlspecialchars($addReleased); ?>"></p>
-                <p><label>Path gambar</label><input type="text" name="foto" value="<?php echo htmlspecialchars($addFoto); ?>"></p>
-                <button type="submit">Simpan</button>
+                <p><label>Path gambar</label><input type="text" name="foto" value="<?php echo htmlspecialchars($addFoto); ?>" placeholder="img/poster.jpg"></p>
+                <button class="btn btn-primary" type="submit">Simpan</button>
             </form>
+            <p class="note">Path gambar adalah lokasi file gambar di komputer/server lokal, contoh: img/poster.jpg (taruh file gambar di folder <code>img</code>).</p>
         <?php endif; ?>
-    </fieldset>
-
-    <h3><?php echo $judulTabel; ?></h3>
-
-    <form method="get" action="index.php">
-        <input type="hidden" name="cari" value="1">
-        <input type="text" name="keyword" placeholder="Judul/kata kunci" value="<?php echo htmlspecialchars($keyword); ?>">
-        <button type="submit">Cari</button>
-        <a href="index.php">Reset</a>
-    </form>
-
-    <?php if (count($tampil) === 0) : ?>
-        <?php if ($hasilCari !== null) : ?>
-            <p>Film tidak ditemukan.</p>
-        <?php else : ?>
-            <p>Belum ada data film.</p>
-        <?php endif; ?>
-    <?php else : ?>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Genre</th>
-                <th>Duration</th>
-                <th>Released</th>
-                <th>Foto</th>
-                <th>Aksi</th>
-            </tr>
-            <?php foreach ($tampil as $f) : ?>
-            <tr>
-                <td><?php echo htmlspecialchars($f->getId()); ?></td>
-                <td><?php echo htmlspecialchars($f->getTitle()); ?></td>
-                <td><?php echo htmlspecialchars($f->getGenre()); ?></td>
-                <td><?php echo $f->getDuration(); ?> menit</td>
-                <td><?php echo $f->getReleased(); ?></td>
-                <td><?php echo htmlspecialchars($f->getFoto()); ?></td>
-                <td>
-                    <a href="index.php?action=update&amp;id=<?php echo urlencode($f->getId()); ?>">Update</a>
-                    <a href="index.php?action=hapus&amp;id=<?php echo urlencode($f->getId()); ?>" onclick="return confirm('Hapus data ini?')">Hapus</a>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </table>
-    <?php endif; ?>
+    </div>
 
 </div>
 </body>
