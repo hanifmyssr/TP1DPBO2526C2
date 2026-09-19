@@ -56,12 +56,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         "update_id" => isset($_POST["update_id"]) ? $_POST["update_id"] : ""
     );
 
-    if ($id === "" || $title === "" || $genre === "" || $foto === "") {
+    if (($old["update_id"] === "" && $id === "") || $title === "" || $genre === "" || $foto === "") {
         $error = "Semua field harus diisi!";
     } elseif ($duration < 40) {
         $error = "Durasi film harus lebih dari atau sama dengan 40 menit!";
-    } elseif ($released < 1895 || $released > 2026) {
-        $error = "Tahun rilis tidak valid (1895 - 2026)!";
+    } elseif ($released < 1895 || $released > (int) date("Y")) {
+        $error = "Tahun rilis tidak valid (1895 - " . (int) date("Y") . ")!";
     } else {
         if ($old["update_id"] !== "") {
             // Update data berdasarkan id lama (id tidak diganti)
@@ -108,7 +108,7 @@ if (isset($_GET["cari"])) {
     } else {
         $hasilCari = array();
         foreach ($film as $f) {
-            if (strpos($f->getTitle(), $keyword) !== false) {
+            if (stripos($f->getTitle(), $keyword) !== false) {
                 $hasilCari[] = $f;
             }
         }
@@ -414,7 +414,7 @@ if (!empty($old) && $old["update_id"] === "") {
                 <p><label>Judul</label><input type="text" name="title" value="<?php echo htmlspecialchars($valueTitle); ?>"></p>
                 <p><label>Genre</label><input type="text" name="genre" value="<?php echo htmlspecialchars($valueGenre); ?>"></p>
                 <p><label>Durasi (menit)</label><input type="number" name="duration" min="40" value="<?php echo htmlspecialchars($valueDuration); ?>"></p>
-                <p><label>Tahun rilis</label><input type="number" name="released" min="1895" max="2026" value="<?php echo htmlspecialchars($valueReleased); ?>"></p>
+                <p><label>Tahun rilis</label><input type="number" name="released" min="1895" max="<?php echo date("Y"); ?>" value="<?php echo htmlspecialchars($valueReleased); ?>"></p>
                 <p><label>Path gambar</label><input type="text" name="foto" value="<?php echo htmlspecialchars($valueFoto); ?>" placeholder="img/poster.jpg"></p>
                 <button class="btn btn-warn" type="submit">Update</button>
                 <a class="btn btn-ghost" href="index.php">Batal</a>
@@ -426,7 +426,7 @@ if (!empty($old) && $old["update_id"] === "") {
                 <p><label>Judul</label><input type="text" name="title" value="<?php echo htmlspecialchars($addTitle); ?>" placeholder="Nama film"></p>
                 <p><label>Genre</label><input type="text" name="genre" value="<?php echo htmlspecialchars($addGenre); ?>" placeholder="Drama / Aksi / ..."></p>
                 <p><label>Durasi (menit)</label><input type="number" name="duration" min="40" value="<?php echo htmlspecialchars($addDuration); ?>"></p>
-                <p><label>Tahun rilis</label><input type="number" name="released" min="1895" max="2026" value="<?php echo htmlspecialchars($addReleased); ?>"></p>
+                <p><label>Tahun rilis</label><input type="number" name="released" min="1895" max="<?php echo date("Y"); ?>" value="<?php echo htmlspecialchars($addReleased); ?>"></p>
                 <p><label>Path gambar</label><input type="text" name="foto" value="<?php echo htmlspecialchars($addFoto); ?>" placeholder="img/poster.jpg"></p>
                 <button class="btn btn-primary" type="submit">Simpan</button>
             </form>
