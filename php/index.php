@@ -312,7 +312,6 @@ if (!empty($old) && $old["update_id"] === "") {
         form input:focus { outline: none; border-color: #f5a623; }
         .empty { color: #8b88a8; text-align: center; padding: 20px; font-style: italic; }
         .lokasi { color: #888; font-size: 12px; vertical-align: middle; }
-        .note { font-size: 12px; color: #8b88a8; margin-top: 8px; }
         .aksi { white-space: nowrap; }
         @media (max-width: 700px) {
             form input[type=text], form input[type=number], .search-box { width: 100%; }
@@ -324,7 +323,6 @@ if (!empty($old) && $old["update_id"] === "") {
 
 <div class="header">
     <h1>MANAJEMEN DATA CINEMA</h1>
-    <p>Tambah, Lihat, Ubah, Hapus, dan Cari film favoritmu</p>
 </div>
 
 <div class="container">
@@ -432,7 +430,6 @@ if (!empty($old) && $old["update_id"] === "") {
                 <p><label>Path gambar</label><input type="text" name="foto" value="<?php echo htmlspecialchars($addFoto); ?>" placeholder="img/poster.jpg"></p>
                 <button class="btn btn-primary" type="submit">Simpan</button>
             </form>
-            <p class="note">Path gambar adalah lokasi file gambar di komputer/server lokal, contoh: img/poster.jpg (taruh file gambar di folder <code>img</code>).</p>
         <?php endif; ?>
     </div>
 
