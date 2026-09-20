@@ -104,13 +104,3 @@ Pencarian bersifat *case-insensitive* (huruf besar/kecil dianggap sama).<br>
 <img width="1507" height="646" alt="Hapus data PHP" src="dokumentasi/php/Delete-php.png" />
 
 ---
-
-## Cara Menjalankan
-
-| Bahasa | Perintah |
-|---|---|
-| C++ | `g++ -std=c++17 -pthread -o cinema cpp/Main.cpp` lalu `./cinema` |
-| Java | `javac java/Cinema.java java/Main.java` lalu `java -cp java Main` |
-| Python | `python python/Main.py` |
-| PHP | `php -S localhost:8000` di folder `php/`, buka `http://localhost:8000/index.php` |
-
